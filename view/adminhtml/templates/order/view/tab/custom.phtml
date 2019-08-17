@@ -1,0 +1,57 @@
+<?php 
+$dueDate = $block->getOrderDuedateValue(); 
+$newDate = "";
+if(empty($dueDate)){
+	$newDate = date("m/d/Y"); 	
+}else{
+	$newDate = date("m/d/Y", strtotime($dueDate)); 	
+}
+
+?>
+<?php $assignee =  $block->getOrderAssigneeValue();  ?>
+<?php $url = $block->getUpdateInstructionUrl();?>
+
+<section class="admin__page-section custom-tab-content">
+	<div class="admin__page-section-content">
+		<div id="order-task-management-block" class="admin__page-section-item order-comments-history">
+			<div class="admin__page-section-item-title">
+		        <span class="title"><?= __("Task Management"); ?></span>
+		    </div>
+			<div class="admin__page-section-item-content">        
+				<div class="admin__field">
+				    <label for="order_instructions" class="admin__field-label"><?php echo __("Due Date"); ?></label>
+				    <div class="admin__field-control">
+				    	<input type="text" class="input-text required-entry hasDatepicker admin__control-text" value="<?php echo $newDate; ?>" id="due_date" name="due_date" aria-required="true" />
+				    </div>
+
+					<script>
+						require(['jquery','mage/mage','mage/calendar'], function($){
+				    		$('#due_date').datepicker({
+				        			dateFormat: 'm/d/yy',
+			        				changeMonth: true,
+			        				changeYear: true
+			    			});
+						});
+					</script>
+				</div>
+
+				<div class="admin__field">
+				    <label for="order_instructions" class="admin__field-label"><?php echo __("Assignee"); ?></label>
+				    <div class="admin__field-control">
+				        <select name="assignee" id="assignee" class="admin__control-select" aria-required="true">
+				        		<?php foreach($block->getAdminUsers() as $key=>$value): ?>		        							        			
+				                	<option value="<?= $value['value'] ?>" <?php if($assignee == $value['value']){ echo 'selected="selected"'; } ?> ><?= $value['label'] ?></option>
+				            	<?php endforeach;?>
+				        </select>
+					</div>
+
+					<div class="admin__field-control">
+				         <button id="submit-instructions" title="Submit" type="button" class="action-default scalable action-save action-secondary" onclick="submitAndReloadArea($('order-task-management-block'), '<?= $url ?>')" data-ui-id="widget-button-0">
+						    <span><?= __("Submit Comment"); ?></span>
+						</button>
+				    </div>
+				</div>
+			</div>			
+		</div>
+	</div>
+</section>
